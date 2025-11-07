@@ -93,9 +93,15 @@ const LocationChartComponent = ({ data }: LocationChartProps) => {
           <Tooltip
             formatter={(value: number) => [`${value} characters`, 'Count']}
             contentStyle={{
-              backgroundColor: 'var(--color-surface)',
+              backgroundColor: 'var(--color-background)',
               border: '1px solid var(--color-border)',
               borderRadius: 'var(--radius-md)',
+              color: 'var(--color-text-primary)',
+            }}
+            labelStyle={{
+              color: 'var(--color-text-primary)',
+            }}
+            itemStyle={{
               color: 'var(--color-text-primary)',
             }}
           />

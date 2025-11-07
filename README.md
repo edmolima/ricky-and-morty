@@ -2,7 +2,7 @@
 
 Next.js application consuming the Rick & Morty GraphQL API with infinite scroll, live search, and location analytics.
 
-![Dashboard Screenshot](./public/screenshot-light.png)
+![Dashboard Screenshot](./docs/screenshot-light.png)
 
 ## Quick Start
 

@@ -1,6 +1,5 @@
 :root,
 :root[data-theme='light'] {
-  /* Colors - Light Theme */
   --color-background: #ffffff;
   --color-surface: #f6f9fc;
   --color-border: #e3e8ef;
@@ -24,38 +23,35 @@
   --color-danger: #df1b41;
   --color-danger-light: #fef0f3;
 
-  /* Shadows */
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.12);
 
-  /* Spacing */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 20px;
-  --space-6: 24px;
-  --space-8: 32px;
-  --space-10: 40px;
-  --space-12: 48px;
-  --space-16: 64px;
-  --space-20: 80px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
 
-  /* Typography */
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
 
-  --font-size-xs: 12px;
-  --font-size-sm: 14px;
-  --font-size-base: 16px;
-  --font-size-lg: 18px;
-  --font-size-xl: 20px;
-  --font-size-2xl: 24px;
-  --font-size-3xl: 30px;
-  --font-size-4xl: 36px;
+  --font-size-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --font-size-sm: clamp(0.875rem, 0.825rem + 0.25vw, 1rem);
+  --font-size-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --font-size-lg: clamp(1.125rem, 1.05rem + 0.375vw, 1.25rem);
+  --font-size-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  --font-size-2xl: clamp(1.5rem, 1.35rem + 0.75vw, 1.875rem);
+  --font-size-3xl: clamp(1.875rem, 1.65rem + 1.125vw, 2.25rem);
+  --font-size-4xl: clamp(2.25rem, 1.95rem + 1.5vw, 3rem);
 
   --font-weight-normal: 400;
   --font-weight-medium: 500;
@@ -66,23 +62,20 @@
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.75;
 
-  /* Border radius */
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-xl: 12px;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
   --radius-full: 9999px;
 
-  /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Layout */
-  --container-max-width: 1280px;
-  --content-max-width: 960px;
+  --container-max-width: 90rem;
+  --content-max-width: 60rem;
+  --container-padding: var(--space-4);
 
-  /* Chart Colors */
   --chart-blue: #0088fe;
   --chart-teal: #00c49f;
   --chart-amber: #ffbb28;
@@ -95,7 +88,18 @@
   --chart-sky: #5dade2;
 }
 
-/* Dark Theme */
+@media (min-width: 48em) {
+  :root {
+    --container-padding: var(--space-6);
+  }
+}
+
+@media (min-width: 64em) {
+  :root {
+    --container-padding: var(--space-8);
+  }
+}
+
 :root[data-theme='dark'] {
   --color-background: #0a0e27;
   --color-surface: #1a1f36;

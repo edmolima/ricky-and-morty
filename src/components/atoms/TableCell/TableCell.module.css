@@ -1,17 +1,24 @@
 .cell {
-  padding: var(--space-4) var(--space-4);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-normal);
-  color: var(--color-text-primary);
-  border-bottom: 1px solid var(--color-border);
+  padding: 0;
   text-align: left;
-  transition: background-color var(--transition-fast);
+  border: none;
 }
 
-.cell:first-child {
-  padding-left: var(--space-6);
-}
+@media (min-width: 48em) {
+  .cell {
+    padding: var(--space-4) var(--space-4);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+    color: var(--color-text-primary);
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color var(--transition-fast);
+  }
 
-.cell:last-child {
-  padding-right: var(--space-6);
+  .cell:first-child {
+    padding-left: var(--space-6);
+  }
+
+  .cell:last-child {
+    padding-right: var(--space-6);
+  }
 }
