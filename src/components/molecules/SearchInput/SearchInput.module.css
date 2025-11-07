@@ -1,0 +1,22 @@
+.searchInput {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  max-width: 480px;
+}
+
+.inputWrapper {
+  position: relative;
+  flex: 1;
+}
+
+.clearButton {
+  position: absolute;
+  right: var(--space-2);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: var(--space-2);
+  min-height: 32px;
+}
