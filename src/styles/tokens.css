@@ -81,6 +81,18 @@
   /* Layout */
   --container-max-width: 1280px;
   --content-max-width: 960px;
+
+  /* Chart Colors */
+  --chart-blue: #0088fe;
+  --chart-teal: #00c49f;
+  --chart-amber: #ffbb28;
+  --chart-orange: #ff8042;
+  --chart-indigo: #8884d8;
+  --chart-emerald: #82ca9d;
+  --chart-yellow: #ffc658;
+  --chart-pink: #ff6b9d;
+  --chart-purple: #a569bd;
+  --chart-sky: #5dade2;
 }
 
 /* Dark Theme */
