@@ -26,18 +26,27 @@ type ChartDataItem = {
   value: number;
 };
 
-const CHART_COLORS = [
-  styles.chartBlue,
-  styles.chartTeal,
-  styles.chartAmber,
-  styles.chartOrange,
-  styles.chartIndigo,
-  styles.chartEmerald,
-  styles.chartYellow,
-  styles.chartPink,
-  styles.chartPurple,
-  styles.chartSky,
+const CHART_COLOR_VARS = [
+  '--chart-blue',
+  '--chart-teal',
+  '--chart-amber',
+  '--chart-orange',
+  '--chart-indigo',
+  '--chart-emerald',
+  '--chart-yellow',
+  '--chart-pink',
+  '--chart-purple',
+  '--chart-sky',
 ] as const;
+
+const getChartColors = (): string[] => {
+  if (typeof window === 'undefined') return [];
+
+  const root = document.documentElement;
+  return CHART_COLOR_VARS.map((varName) =>
+    getComputedStyle(root).getPropertyValue(varName).trim()
+  );
+};
 
 const renderLabel = (props: PieLabelRenderProps): string => {
   const { name, percent } = props;
@@ -57,7 +66,9 @@ const LocationChartComponent = ({ data }: LocationChartProps) => {
     [data]
   );
 
-  if (chartData.length === 0) return null;
+  const colors = useMemo(() => getChartColors(), []);
+
+  if (chartData.length === 0 || colors.length === 0) return null;
 
   return (
     <div className={styles.chartContainer}>
@@ -75,7 +86,7 @@ const LocationChartComponent = ({ data }: LocationChartProps) => {
             {chartData.map((entry, index) => (
               <Cell
                 key={`cell-${entry.name}-${index}`}
-                className={CHART_COLORS[index % CHART_COLORS.length]}
+                fill={colors[index % colors.length]}
               />
             ))}
           </Pie>

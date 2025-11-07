@@ -10,46 +10,6 @@
   min-height: 400px;
 }
 
-.chartBlue {
-  fill: var(--chart-blue);
-}
-
-.chartTeal {
-  fill: var(--chart-teal);
-}
-
-.chartAmber {
-  fill: var(--chart-amber);
-}
-
-.chartOrange {
-  fill: var(--chart-orange);
-}
-
-.chartIndigo {
-  fill: var(--chart-indigo);
-}
-
-.chartEmerald {
-  fill: var(--chart-emerald);
-}
-
-.chartYellow {
-  fill: var(--chart-yellow);
-}
-
-.chartPink {
-  fill: var(--chart-pink);
-}
-
-.chartPurple {
-  fill: var(--chart-purple);
-}
-
-.chartSky {
-  fill: var(--chart-sky);
-}
-
 @media (max-width: 768px) {
   .chartContainer {
     padding: var(--space-4);
