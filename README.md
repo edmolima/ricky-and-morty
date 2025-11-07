@@ -1,36 +1,161 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rick and Morty Dashboard
 
-## Getting Started
+Next.js application consuming the Rick & Morty GraphQL API with infinite scroll, live search, and location analytics.
 
-First, run the development server:
+![Dashboard Screenshot](./public/screenshot-light.png)
+
+## Quick Start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+pnpm dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Requirements
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Node.js 18+
+- pnpm (or npm/yarn)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Commands
 
-## Learn More
+```bash
+pnpm dev                # Development server
+pnpm build              # Production build
+pnpm start              # Production server
+pnpm lint               # ESLint
+pnpm test               # Unit tests (watch)
+pnpm test:coverage      # Coverage report
+pnpm test:e2e           # E2E tests
+pnpm test:e2e:ui        # E2E UI mode
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Architecture
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Component Structure (Atomic Design)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```text
+src/components/
+├── atoms/           # Button, Input, Spinner, TableCell, Icon
+├── molecules/       # SearchInput, TableRow, ThemeToggle
+├── organisms/       # CharacterTable, LocationChart
+└── templates/       # ErrorBoundary, WebVitals
+```
 
-## Deploy on Vercel
+### Data Layer
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**GraphQL Client:** Apollo Client with custom cache merge strategy
+**Pagination:** Cursor-based interface over page-based API
+**Search:** Debounced with `useDeferredValue` (React 19)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Custom Hooks:**
+
+- `useCharacters` - Paginated character fetching with cursor abstraction
+- `useSearchCharacters` - Debounced search wrapper
+- `useCharactersByLocation` - Parallel batch fetching for chart aggregation
+- `useInfiniteScroll` - Generic IntersectionObserver hook
+- `useTheme` - Dark mode with localStorage + system preference
+
+### Key Technical Decisions
+
+**1. Cursor-based pagination interface:**
+The Rick & Morty API uses page numbers, but we expose a cursor-based interface (`hasNextPage`, `fetchNextPage`) by treating `info.next` as the cursor. This abstracts pagination details and enables easier API migrations.
+
+```typescript
+// useCharacters.ts
+const nextPage = data?.characters?.info?.next;  // cursor
+const hasNextPage = Boolean(nextPage);
+```
+
+**2. Cache merge strategy:**
+Apollo cache merges paginated results using `keyArgs: ['filter']` to separate cache by search term, resetting on `page: 1` for new searches.
+
+```typescript
+// client.ts
+merge(existing, incoming, { args }) {
+  if (!existing || args?.page === 1) return incoming;
+  return {
+    ...incoming,
+    results: [...existing.results, ...incoming.results]
+  };
+}
+```
+
+**3. Parallel fetching for chart:**
+Location chart aggregates ~800 characters by fetching 10 sample pages in parallel (batches of 5) to avoid blocking the UI. Uses `AbortController` for proper cleanup.
+
+**4. React Compiler:**
+Enabled automatic memoization, eliminating manual `useMemo`/`useCallback` in most cases. Only used explicitly where ref stability is critical (e.g., `useCharacters` filter).
+
+**5. CSS Modules over CSS-in-JS:**
+Zero runtime cost, better build-time optimization, simple mental model. Design tokens via CSS custom properties for theming.
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router, Turbopack)
+- **React:** 19.2.0 (React Compiler enabled)
+- **TypeScript:** 5.9.3 (strict mode)
+- **Data:** Apollo Client 4 + GraphQL
+- **Styling:** CSS Modules + Design Tokens
+- **Charts:** Recharts 3.3.0
+- **Testing:** Vitest + Playwright + MSW
+
+## Testing
+
+**Unit Tests (9):**
+All atoms, key molecules, and hooks. Mock GraphQL with MSW.
+
+**E2E Tests (10 scenarios):**
+Search, infinite scroll, theme toggle, responsive design, keyboard navigation.
+
+**Coverage:**
+~20% LOC. Focused on integration points and user-facing behavior over line coverage metrics.
+
+```bash
+pnpm test:coverage    # Vitest coverage
+pnpm test:e2e         # Playwright
+```
+
+## Features
+
+### Core Requirements ✓
+
+- Infinite scroll table with cursor-based pagination
+- Live search by character name (debounced)
+- Pie chart of top 10 locations
+- Atomic design component structure
+- Unit + integration tests
+
+### Additional Features
+
+- Dark mode (system preference aware)
+- Design token system (CSS variables)
+- TypeScript strict mode (100% type-safe)
+- Accessibility (semantic HTML, ARIA, keyboard nav)
+- E2E test suite (Playwright)
+- Error boundaries with graceful fallbacks
+- Performance monitoring (Web Vitals)
+
+## Trade-offs
+
+**Time-boxed to ~6 hours:**
+
+**Completed:**
+
+- All core requirements
+- Dark mode + theming system
+- Comprehensive E2E coverage
+- Accessibility features
+
+**Deferred (nice-to-haves):**
+
+- Skeleton screens (using spinner instead)
+- Higher test coverage (focused on critical paths)
+- Virtual scrolling (unnecessary for dataset size)
+- Server-side rendering for table (client-side sufficient)
+- Storybook (would add for team design system)
+
+**Known limitations:**
+
+- Recharts bundle size (100KB) - acceptable for prototype, would evaluate alternatives for production
+- Chart samples 10 pages for performance - adequate for 800 total characters
+- No retry logic - API is stable, would add exponential backoff for production

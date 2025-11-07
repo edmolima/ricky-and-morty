@@ -12,7 +12,7 @@ export function renderWithProviders(
   { mocks = [], ...options }: CustomRenderOptions = {}
 ) {
   function Wrapper({ children }: { children: React.ReactNode }) {
-    return <MockedProvider mocks={mocks}>{children}</MockedProvider>;
+    return <MockedProvider mocks={mocks} addTypename={false}>{children}</MockedProvider>;
   }
 
   return render(ui, { wrapper: Wrapper, ...options });
