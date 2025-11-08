@@ -57,16 +57,19 @@ src/components/
 
 ### Key Technical Decisions
 
-**1. Cursor-based pagination interface:**
+**1. Pie chart vs Bar chart:**
+Assignment summary requests "pizza chart" (pie chart), while component requirements mention "bar chart". Implemented **pie chart** as it better represents part-to-whole relationships for location distribution.
+
+**2. Cursor-based pagination interface:**
 The Rick & Morty API uses page numbers, but we expose a cursor-based interface (`hasNextPage`, `fetchNextPage`) by treating `info.next` as the cursor. This abstracts pagination details and enables easier API migrations.
 
 ```typescript
 // useCharacters.ts
-const nextPage = data?.characters?.info?.next;  // cursor
+const nextPage = data?.characters?.info?.next;
 const hasNextPage = Boolean(nextPage);
 ```
 
-**2. Cache merge strategy:**
+**3. Cache merge strategy:**
 Apollo cache merges paginated results using `keyArgs: ['filter']` to separate cache by search term, resetting on `page: 1` for new searches.
 
 ```typescript
@@ -80,13 +83,13 @@ merge(existing, incoming, { args }) {
 }
 ```
 
-**3. Parallel fetching for chart:**
+**4. Parallel fetching for chart:**
 Location chart aggregates ~800 characters by fetching 10 sample pages in parallel (batches of 5) to avoid blocking the UI. Uses `AbortController` for proper cleanup.
 
-**4. React Compiler:**
+**5. React Compiler:**
 Enabled automatic memoization, eliminating manual `useMemo`/`useCallback` in most cases. Only used explicitly where ref stability is critical (e.g., `useCharacters` filter).
 
-**5. CSS Modules over CSS-in-JS:**
+**6. CSS Modules over CSS-in-JS:**
 Zero runtime cost, better build-time optimization, simple mental model. Design tokens via CSS custom properties for theming.
 
 ## Tech Stack
@@ -136,8 +139,6 @@ pnpm test:e2e         # Playwright
 - Performance monitoring (Web Vitals)
 
 ## Trade-offs
-
-**Time-boxed to ~6 hours:**
 
 **Completed:**
 
