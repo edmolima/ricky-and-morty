@@ -12,11 +12,7 @@ export function renderWithProviders(
   { mocks = [], ...options }: CustomRenderOptions = {}
 ) {
   function Wrapper({ children }: { children: ReactNode }) {
-    return (
-      <MockedProvider mocks={mocks} addTypename={false}>
-        {children}
-      </MockedProvider>
-    );
+    return <MockedProvider mocks={mocks}>{children}</MockedProvider>;
   }
 
   return render(ui, { wrapper: Wrapper, ...options });
@@ -24,11 +20,7 @@ export function renderWithProviders(
 
 export function createApolloWrapper(mocks: MockLink.MockedResponse[] = []) {
   return function Wrapper({ children }: { children: ReactNode }) {
-    return (
-      <MockedProvider mocks={mocks} addTypename={false}>
-        {children}
-      </MockedProvider>
-    );
+    return <MockedProvider mocks={mocks}>{children}</MockedProvider>;
   };
 }
 
